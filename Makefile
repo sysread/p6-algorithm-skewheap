@@ -15,10 +15,10 @@ dist: doc clean
 			 .
 
 release: dist
-	@read -p "Upload $(FILE) to CPAN? [y/n] " yn; \
-	@case "$$yn" in \
-		Y|y ) echo cpan-upload -d Perl6 $(FILE);; \
-		  * ) echo Cancelled;;  \
+	@read -p "Upload $(FILE) to CPAN? [y/n] " yn; 	\
+	case $$yn in 																		\
+		y) cpan-upload -d Perl6 $(FILE);; 	          \
+		*) echo Cancelled;;  										      \
 	esac
 
 doc:
