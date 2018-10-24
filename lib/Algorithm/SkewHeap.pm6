@@ -22,6 +22,8 @@ Algorithm::SkewHeap - a mergable min heap
     my $n = $heap.take;
   }
 
+  $heap.merge($other-heap);
+
 
 =head1 DESCRIPTION
 

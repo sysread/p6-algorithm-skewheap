@@ -23,6 +23,8 @@ SYNOPSIS
       my $n = $heap.take;
     }
 
+    $heap.merge($other-heap);
+
 DESCRIPTION
 ===========
 
