@@ -79,6 +79,7 @@ multi sub merge(Node:D $a, Node:D $b) {
 }
 
 
+#| SkewHeap class
 class Algorithm::SkewHeap:ver<0.0.1> {
   has Node $!root;
   has Int$!nodes = 0;

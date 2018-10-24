@@ -1,7 +1,7 @@
 NAME
 ====
 
-Algorithm::SkewHeap
+Algorithm::SkewHeap - a mergable min heap
 
 VERSION
 =======
@@ -32,6 +32,11 @@ SORTING
 =======
 
 Items in the heap are returned with the lowest first. Comparisons are done with the greater than operator, which may be overloaded as needed for types intended to be used in the heap.
+
+class Algorithm::SkewHeap
+-------------------------
+
+SkewHeap class
 
 ### method size
 
