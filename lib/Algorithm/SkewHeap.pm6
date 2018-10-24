@@ -87,20 +87,20 @@ class Algorithm::SkewHeap:ver<0.0.1> {
   has Int$!nodes = 0;
 
   #| Returns the number of items in the heap
-  method size { return $!nodes }
+  method size(--> Int) { return $!nodes }
 
   #| Returns true when the heap is empty
-  method is-empty { return $!nodes == 0 }
+  method is-empty(--> Bool) { return $!nodes == 0 }
 
   #| Returns the top item in the heap without removing it.
-  method top {
+  method top(--> Any) {
     return unless $!nodes;
     return unless $!root.DEFINITE;
     $!root.value;
   }
 
   #| Removes and returns the top item in the heap.
-  method take {
+  method take(--> Any) {
     my $value = self.top // return;
     $!root = merge($!root.left, $!root.right);
     --$!nodes;
@@ -108,14 +108,14 @@ class Algorithm::SkewHeap:ver<0.0.1> {
   }
 
   #| Adds a new item to the heap. Returns the new size of the heap.
-  method put($value) {
+  method put($value --> Int) {
     $!root = merge($!root, Node.new(value => $value));
     ++$!nodes;
   }
 
   #| Destructively merges with another heap. The other heap should be
-  #| considered unusable afterward.
-  method merge(Algorithm::SkewHeap $other) {
+  #| considered unusable afterward. Returns the new size of the heap.
+  method merge(Algorithm::SkewHeap $other --> Int) {
     my $count = $other.nodes;
     my $root = $other.root;
 
@@ -125,6 +125,7 @@ class Algorithm::SkewHeap:ver<0.0.1> {
 
     $!root = merge($!root, $root);
     $!nodes += $count;
+    $!nodes;
   }
 
   #| Prints the structure of the heap for debugging purposes.

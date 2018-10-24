@@ -43,7 +43,7 @@ SkewHeap class
 ### method size
 
 ```perl6
-method size() returns Mu
+method size() returns Int
 ```
 
 Returns the number of items in the heap
@@ -51,7 +51,7 @@ Returns the number of items in the heap
 ### method is-empty
 
 ```perl6
-method is-empty() returns Mu
+method is-empty() returns Bool
 ```
 
 Returns true when the heap is empty
@@ -59,7 +59,7 @@ Returns true when the heap is empty
 ### method top
 
 ```perl6
-method top() returns Mu
+method top() returns Any
 ```
 
 Returns the top item in the heap without removing it.
@@ -67,7 +67,7 @@ Returns the top item in the heap without removing it.
 ### method take
 
 ```perl6
-method take() returns Mu
+method take() returns Any
 ```
 
 Removes and returns the top item in the heap.
@@ -77,7 +77,7 @@ Removes and returns the top item in the heap.
 ```perl6
 method put(
     $value
-) returns Mu
+) returns Int
 ```
 
 Adds a new item to the heap. Returns the new size of the heap.
@@ -87,10 +87,10 @@ Adds a new item to the heap. Returns the new size of the heap.
 ```perl6
 method merge(
     Algorithm::SkewHeap $other
-) returns Mu
+) returns Int
 ```
 
-Destructively merges with another heap. The other heap should be considered unusable afterward.
+Destructively merges with another heap. The other heap should be considered unusable afterward. Returns the new size of the heap.
 
 ### method explain
 
