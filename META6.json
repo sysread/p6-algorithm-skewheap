@@ -3,7 +3,7 @@
   "name":          "Algorithm::SkewHeap",
   "auth":          "github:sysread",
   "version":       "0.0.1",
-  "description":   "",
+  "description":   "A fast, flexible min heap",
   "authors":       ["Jeff Ober"],
   "license":       "Artistic-2.0",
   "provides":      {"Algorithm::SkewHeap" : "lib/Algorithm/SkewHeap.pm6"},
