@@ -95,7 +95,7 @@ Destructively merges with another heap. The other heap should be considered unus
 ### method explain
 
 ```perl6
-method explain() returns Mu
+method explain() returns Nil
 ```
 
 Prints the structure of the heap for debugging purposes.

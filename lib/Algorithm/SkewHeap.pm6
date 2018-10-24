@@ -84,13 +84,17 @@ multi sub merge(Node:D $a, Node:D $b) {
 #| SkewHeap class
 class Algorithm::SkewHeap:ver<0.0.1> {
   has Node $!root;
-  has Int$!nodes = 0;
+  has Int  $!nodes = 0;
 
   #| Returns the number of items in the heap
-  method size(--> Int) { return $!nodes }
+  method size(--> Int) {
+    return $!nodes;
+  }
 
   #| Returns true when the heap is empty
-  method is-empty(--> Bool) { return $!nodes == 0 }
+  method is-empty(--> Bool) {
+    return $!nodes == 0;
+  }
 
   #| Returns the top item in the heap without removing it.
   method top(--> Any) {
@@ -108,7 +112,7 @@ class Algorithm::SkewHeap:ver<0.0.1> {
   }
 
   #| Adds a new item to the heap. Returns the new size of the heap.
-  method put($value --> Int) {
+  method put(Any $value --> Int) {
     $!root = merge($!root, Node.new(value => $value));
     ++$!nodes;
   }
@@ -129,9 +133,10 @@ class Algorithm::SkewHeap:ver<0.0.1> {
   }
 
   #| Prints the structure of the heap for debugging purposes.
-  method explain {
+  method explain(--> Nil) {
     say "SkewHeap: size=$!nodes";
     $!root.explain(1);
+    return;
   }
 }
 
