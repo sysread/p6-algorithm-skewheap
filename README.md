@@ -16,11 +16,11 @@ SYNOPSIS
     my $heap = Algorithm::SkewHeap.new;
 
     for (1 .. 1000).pick(1000) -> $n {
-      $heap.put($n);
+        $heap.put($n);
     }
 
     until $heap.is-empty {
-      my $n = $heap.take;
+        my $n = $heap.take;
     }
 
     $heap.merge($other-heap);

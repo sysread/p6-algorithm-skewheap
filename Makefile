@@ -22,7 +22,7 @@ release: dist
 	esac
 
 doc:
-	perl6 --doc=Markdown $(PKG) > README.md
+	raku --doc=Markdown $(PKG) > README.md
 
 test:
 	@zef test -v .

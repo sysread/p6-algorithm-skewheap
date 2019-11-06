@@ -11,7 +11,7 @@ is $heap.size, 0, 'size';
 ok $heap.is-empty, 'is-empty';
 
 for @nums -> $num {
-  ok $heap.put($num), 'put';
+    ok $heap.put($num), 'put';
 }
 
 is $heap.size, $size, 'size';
@@ -20,19 +20,19 @@ ok !$heap.is-empty, '!is-empty';
 my $prev;
 my $count = $heap.size;
 while !$heap.is-empty {
-  is $heap.size, $count, "size: $count"
+    is $heap.size, $count, "size: $count"
     or bail-out;
 
-  --$count;
+    --$count;
 
-  my $item = $heap.take // $heap.explain;
-  ok $item, "take: $item";
+    my $item = $heap.take // $heap.explain;
+    ok $item, "take: $item";
 
-  if ($prev.DEFINITE) {
-    ok $item >= $prev, "$item >= $prev";
-  }
+    if ($prev.DEFINITE) {
+        ok $item >= $prev, "$item >= $prev";
+    }
 
-  $prev = $item;
+    $prev = $item;
 }
 
 is $heap.size, 0, 'size';

@@ -10,19 +10,19 @@ Algorithm::SkewHeap - a mergable min heap
 
 =head1 SYNOPSIS
 
-  use Algorithm::SkewHeap;
+    use Algorithm::SkewHeap;
 
-  my $heap = Algorithm::SkewHeap.new;
+    my $heap = Algorithm::SkewHeap.new;
 
-  for (1 .. 1000).pick(1000) -> $n {
-    $heap.put($n);
-  }
+    for (1 .. 1000).pick(1000) -> $n {
+        $heap.put($n);
+    }
 
-  until $heap.is-empty {
-    my $n = $heap.take;
-  }
+    until $heap.is-empty {
+        my $n = $heap.take;
+    }
 
-  $heap.merge($other-heap);
+    $heap.merge($other-heap);
 
 
 =head1 DESCRIPTION
@@ -41,102 +41,99 @@ to be used in the heap.
 =end pod
 
 my class Node {
-  has Node $.left  is rw;
-  has Node $.right is rw;
-  has $.value is rw;
+    has Node $.left  is rw;
+    has Node $.right is rw;
+    has $.value is rw;
 
-  method explain(Int $depth = 0) {
-    print '  ' for 1..$depth;
-    say "-Value: $!value";
+    method explain(Int $depth = 0) {
+        print '  ' for 1..$depth;
+        say "-Value: $!value";
 
-    if $!left.DEFINITE {
-      print '  ' for 1..$depth;
-      say '-Left';
-      $!left.explain($depth + 1);
+        if $!left.DEFINITE {
+            print '  ' for 1..$depth;
+            say '-Left';
+            $!left.explain($depth + 1);
+        }
+
+        if $!right.DEFINITE {
+            print '  ' for 1..$depth;
+            say '-Right';
+            $!right.explain($depth + 1);
+        }
     }
-
-    if $!right.DEFINITE {
-      print '  ' for 1..$depth;
-      say '-Right';
-      $!right.explain($depth + 1);
-    }
-  }
 }
 
 
-multi sub merge(Node:U $a, Node:U $b) { return    }
-multi sub merge(Node:D $a, Node:U $b) { return $a }
-multi sub merge(Node:U $a, Node:D $b) { return $b }
-
-multi sub merge(Node:D $a, Node:D $b) {
-  return $a unless $b.DEFINITE;
-  return $b unless $a.DEFINITE;
-  return $a.value > $b.value
-    ?? merge($b, $a)
-    !! Node.new(
-      left  => merge($b, $a.right),
-      right => $a.left,
-      value => $a.value,
+proto merge(Node $a, Node $b --> Node) {*}
+multi merge(Node:U $a, Node:U $b) { }
+multi merge(Node:D $a, Node:U $b) { $a }
+multi merge(Node:U $a, Node:D $b) { $b }
+multi merge(Node:D $a, Node:D $b where $a.value > $b.value) { merge($b, $a) }
+multi merge(Node:D $a, Node:D $b) {
+    Node.new(
+        left  => merge($b, $a.right),
+        right => $a.left,
+        value => $a.value,
     );
 }
 
 
 #| SkewHeap class
 class Algorithm::SkewHeap:ver<0.0.1> {
-  has Node $!root;
-  has Int  $!nodes = 0;
+    has Node $!root;
+    has Int  $!nodes = 0;
 
-  #| Returns the number of items in the heap
-  method size(--> Int) {
-    return $!nodes;
-  }
+    #| Returns the number of items in the heap
+    method size(--> Int) {
+        return $!nodes;
+    }
 
-  #| Returns true when the heap is empty
-  method is-empty(--> Bool) {
-    return $!nodes == 0;
-  }
+    #| Returns true when the heap is empty
+    method is-empty(--> Bool) {
+        return $!nodes == 0;
+    }
 
-  #| Returns the top item in the heap without removing it.
-  method top(--> Any) {
-    return unless $!nodes;
-    return unless $!root.DEFINITE;
-    $!root.value;
-  }
+    #| Returns the top item in the heap without removing it.
+    method top(--> Any) {
+        return unless $!nodes;
+        return unless $!root.DEFINITE;
+        $!root.value;
+    }
 
-  #| Removes and returns the top item in the heap.
-  method take(--> Any) {
-    my $value = self.top // return;
-    $!root = merge($!root.left, $!root.right);
-    --$!nodes;
-    $value;
-  }
+    #| Removes and returns the top item in the heap.
+    method take(--> Any) {
+        my $value = self.top // return;
+        $!root = merge($!root.left, $!root.right);
+        --$!nodes;
+        $value;
+    }
 
-  #| Adds a new item to the heap. Returns the new size of the heap.
-  method put(Any $value --> Int) {
-    $!root = merge($!root, Node.new(value => $value));
-    ++$!nodes;
-  }
+    #| Adds a new item to the heap. Returns the new size of the heap.
+    method put(Any $value --> Int) {
+        $!root = merge($!root, Node.new(value => $value));
+        ++$!nodes;
+    }
 
-  #| Destructively merges with another heap. The other heap should be
-  #| considered unusable afterward. Returns the new size of the heap.
-  method merge(Algorithm::SkewHeap $other --> Int) {
-    my $count = $other.nodes;
-    my $root = $other.root;
+    #| Destructively merges with another heap. The other heap should be
+    #| considered unusable afterward. Returns the new size of the heap.
+    method merge(Algorithm::SkewHeap $other --> Int) {
+        my $count = $other.nodes;
+        my $root = $other.root;
 
-    # Zero out the other heap to ensure no shared structure
-    $other.nodes = 0;
-    $other.root = Nil;
+        # Zero out the other heap to ensure no shared structure
+        $other.nodes = 0;
+        $other.root = Nil;
 
-    $!root = merge($!root, $root);
-    $!nodes += $count;
-    $!nodes;
-  }
+        $!root = merge($!root, $root);
+        $!nodes += $count;
+        $!nodes;
+    }
 
-  #| Prints the structure of the heap for debugging purposes.
-  method explain(--> Nil) {
-    say "SkewHeap: size=$!nodes";
-    $!root.explain(1);
-    return;
-  }
+    #| Prints the structure of the heap for debugging purposes.
+    method explain(--> Nil) {
+        say "SkewHeap: size=$!nodes";
+        $!root.explain(1);
+        return;
+    }
 }
 
